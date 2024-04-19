@@ -189,25 +189,17 @@
                 const pageURL = e.currentTarget.dataset.url;  // 获取卡片对应的页面 URL
                 const cardId = e.currentTarget.id;  // 获取卡片的 id
 
-                // 检查点击的是否是第二张或第三张卡片
+                // 检查点击的是否是第二张卡片
                 if (cardId == 'card2') {
                     // 显示弹窗提示，不执行跳转
                     alert('项目经历还在梳理中，敬请期待');
                 }
                 else {
-                    if (cardId == 'card3') {
-                        // 显示弹窗提示，不执行跳转
-                        alert('各平台账号还在搭建，敬请期待');
-                    } else {
-                        // 对于其他卡片，执行原有的跳转逻辑
-                        if (pageURL) {
-                            window.location.href = pageURL;
-                        }
+                    if (pageURL) {
+                        window.location.href = pageURL;
                     }
                 }
             }
-
-
         }
 
         // function playAudio(e) {
@@ -282,7 +274,7 @@
             <img src="./images/卡片名言02.png" alt="" class="character">
         </div>
 
-        <div class="card" id="card3" data-url="page1.html">
+        <div class="card" id="card3" data-url="contact_with_me.html">
             <div class="wrapper">
                 <img src="./images/卡片背景图片03.png" alt="" class="cover-image">
             </div>

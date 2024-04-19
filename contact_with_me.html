@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>与我联系</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(to top, rgb(138, 135, 151) 0%, #98aac9 100%);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 30%;
+            /* 改变宽度以调整图标间距 */
+            margin-top: 10px;
+        }
+
+        .icon {
+            width: 45px;
+            height: 45px;
+        }
+
+        #backButton img {
+            position: fixed;
+            /* 或者absolute，取决于其他布局需求 */
+            top: 20px;
+            /* 可调整为适合的位置 */
+            left: 30px;
+            /* 确保按钮在最左侧 */
+            width: 25px;
+            height: 25px;
+        }
+
+        #messages {
+            width: 60%;
+            height: 60vh;
+            /* 调整高度以适应更多内容 */
+            margin: 20px 0;
+            overflow: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* 添加阴影以增强视觉效果 */
+            border-radius: 8px;
+            /* 添加圆角 */
+        }
+
+        .message {
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            /* 使用底边线代替全边框 */
+            margin: 5px 0;
+            padding: 10px;
+            background: none;
+        }
+
+        #addMessage {
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            background-color: #5d90d7;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #addMessage:hover {
+            background-color: #4d7498;
+            /* 悬停时颜色变化 */
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            let canvas = document.getElementById('bgCanvas');
+            let ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', function () {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initLines();
+            });
+
+            let lines = [];
+            function initLines() {
+                lines = [];
+                for (let i = 0; i < 100; i++) {
+                    lines.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        length: Math.random() * 100,
+                        speed: Math.random() * 5,
+                        opacity: 0,
+                        fadingIn: true,
+                    });
+                }
+            }
+            initLines();
+
+            function drawLines() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let line of lines) {
+                    ctx.beginPath();
+                    ctx.moveTo(line.x, line.y);
+                    ctx.lineTo(line.x + line.length, line.y + line.length);
+                    let gradient = ctx.createLinearGradient(line.x, line.y, line.x + line.length, line.y + line.length);
+                    gradient.addColorStop(1, `rgba(255, 255, 255, ${line.opacity})`);
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+                    ctx.strokeStyle = gradient;
+                    ctx.stroke();
+
+                    line.x += line.speed;
+                    line.y += line.speed;
+
+                    if (line.fadingIn) {
+                        line.opacity += 0.01;
+                        if (line.opacity >= 1) {
+                            line.fadingIn = false;
+                        }
+                    } else {
+                        line.opacity -= 0.01;
+                        if (line.opacity <= 0) {
+                            line.x = Math.random() * canvas.width;
+                            line.y = Math.random() * canvas.height;
+                            line.length = Math.random() * 100;
+                            line.speed = Math.random() * 5;
+                            line.fadingIn = true;
+                        }
+                    }
+                }
+            }
+
+            setInterval(drawLines, 50);
+            const quoteBox = document.getElementById('quote-box');
+            quotes.forEach(function (quote) {
+                const div = document.createElement('div');
+                let author = quote.split("——")[1];
+                const text = quote.split("——")[0];
+                // 判断作者是否存在，如果不存在则不显示
+                author = author ? `——${author}` : '';
+                div.innerHTML = `${text}<span class="author">${author}</span>`;
+                div.className = 'quote';
+                quoteBox.appendChild(div);
+            });
+        };
+    </script>
+</head>
+
+<body>
+    <a href="./index.html" id="backButton"><img src="./images/返回.svg" alt="Back"></a>
+    <div class="control-panel">
+        <a href="https://github.com/ZhangYantao12138"><img src="./images/GitHub-Symbol.png" alt="GitHub"
+                class="icon"></a>
+        <a href="https://www.bilibili.com/"><img src="./images/bilibili_symbol.png" alt="Bilibili" class="icon"></a>
+        <a href="mailto:869684589@qq.com"><img src="./images/邮箱.png" alt="Email" class="icon"></a>
+    </div>
+    <div id="messages">
+        <div class="message">留言1：blabla</div>
+        <div class="message">留言2：blabla</div>
+    </div>
+    <div id="addMessage">+</div>
+    <canvas id="bgCanvas"></canvas>
+    <script>
+        document.getElementById('addMessage').addEventListener('click', function () {
+            const newMsg = prompt("请输入新的留言:");
+            if (newMsg) {
+                const msgDiv = document.createElement('div');
+                msgDiv.classList.add('message');
+                msgDiv.textContent = newMsg;
+                document.getElementById('messages').appendChild(msgDiv);
+            }
+        });
+    </script>
+</body>
+
+</html>
